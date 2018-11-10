@@ -1,0 +1,244 @@
+ * {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--color-white: rgb(254, 254, 254);
+	--color-white-light: rgba(254, 254, 254, .6);
+	--color-green: #509000;
+	--color-blue: #1c69d4;
+	--color-blue-light: #C7EEFF;
+	--color-red: #F90000;
+	--color-orange: #DC9012;
+	--color-purple: #f0f;
+	--color-cyan: #0ff;
+	--color-main-border: #222a32;
+	--color-page-gradient-from: #485563;
+	--color-page-gradient-to: #29323c;
+}
+
+@font-face {
+	font-family: 'Advent Pro';
+	font-style: normal;
+	font-weight: 100;
+	src: local('Advent Pro Thin'), local('AdventPro-Thin'), url('./fonts/advent-pro-100-reduced.woff2?2017-01-21-v3') format('woff2');
+}
+
+html {
+	height: 100%;
+
+	background: linear-gradient( to bottom right, var(--color-page-gradient-from), var(--color-page-gradient-to) );
+
+	color: var(--color-white);
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+
+	-webkit-font-smoothing: antialiased;
+}
+h2 {
+	font-size: 22px;
+	font-weight: 200;
+	line-height: 24px;
+	letter-spacing: 1px;
+}
+h4 {
+	color: var(--color-white-light);
+	font-size: 14px;
+	font-weight: 200;
+	line-height: 16px;
+	letter-spacing: 1px;
+}
+units {
+	font-size: 14px;
+	font-weight: 200;
+	line-height: 16px;
+	letter-spacing: 1px;
+}
+footerdatetext {
+	font-size: 9px;
+	font-weight: 200;
+	line-height: 16px;
+	letter-spacing: 1px;
+}			
+section {
+	margin-bottom: 20px;
+
+	flex-basis: 50%;
+	max-width: 50%;
+}
+
+header {
+	top: 0;
+	width: 100%;
+	padding: 45px 0 4px;
+	position: absolute;
+}
+footer {
+	width: 100%;
+	height: 36%;
+	bottom: 0;
+	position: absolute;
+
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+header,
+footer {
+	opacity: 1;
+
+	transition: opacity .25s;
+}
+header:empty,
+footer:empty {
+	opacity: 0;
+}
+
+main {
+	top: 35%;
+	left: 50%;
+	width: 200px;
+	height: 200px;
+	position: absolute;
+
+	border: 12px solid var(--color-main-border);
+	border-radius: 100%;
+	overflow: hidden;
+
+	transform: translate(-50%, -50%);
+
+	box-shadow: 0 0 0 transparent;
+	transition: all 1.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.loading main {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	animation: pulse 1.7s infinite;
+}
+.loading main::after {
+	display: block;
+	content: 'Updating';
+
+	color: var(--color-white);
+	font-size: 22px;
+	font-weight: 200;
+	line-height: 24px;
+	letter-spacing: 1px;
+}
+
+.percent {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+
+	z-index: 3;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.percent::before {
+	content: attr(data-percent);
+	display: block;
+
+	font-family: 'Advent Pro';
+	font-size: 80px;
+	line-height: 80px;
+	font-weight: 100;
+
+	text-rendering: optimizeLegibility;
+}
+.percent::after {
+	top: 58px;
+	right: 20px;
+	position: absolute;
+
+	content: '%';
+	display: block;
+
+	font-size: 26px;
+	line-height: 26px;
+	font-weight: 100;
+
+	opacity: .6;
+}
+
+.water {
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	position: absolute;
+
+	z-index: 2;
+
+	background: var(--color-green);
+}
+
+.wave {
+	width: 200%;
+	bottom: 100%;
+	display: none;
+	position: absolute;
+}
+.wave-back {
+	right: 0;
+
+	fill: var(--color-blue-light);
+
+	animation: wave-back 1.4s infinite linear;
+}
+.wave-front {
+	left: 0;
+	margin-bottom: -1px;
+
+	fill: var(--color-blue);
+
+	animation: wave-front .7s infinite linear;
+}
+
+@keyframes wave-front {
+	100% {
+		transform: translate(-50%, 0);
+	}
+}
+@keyframes wave-back {
+	100% {
+		transform: translate(50%, 0);
+	}
+}
+@keyframes pulse {
+	50% {
+		box-shadow: -5px 0 20px var(--color-purple), 5px 0 20px var(--color-cyan);
+	}
+}
+
+[data-percent^="0"] + .water,
+[data-percent^="1"] + .water,
+[data-percent^="2"] + .water {
+	background: var(--color-red);
+}
+[data-percent^="3"] + .water,
+[data-percent^="4"] + .water {
+	background: var(--color-orange);
+}
+[data-percent="100"] + .water {
+	background: var(--color-green);
+}
+
+[data-charging="1"].water {
+	background: var(--color-blue);
+}
+[data-charging="1"] .wave {
+	display: block;
+}
